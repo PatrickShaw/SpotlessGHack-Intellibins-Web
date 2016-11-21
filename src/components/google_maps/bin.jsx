@@ -8,17 +8,6 @@ import img from "../../drawables/marker.svg";
 class Bin extends Component {
     constructor(props) {
         super(props);
-        this.state = {showInfoWindow: false};
-        this.showWindow = this.showWindow.bind(this);
-        this.hideWindow = this.hideWindow.bind(this);
-    }
-
-    showWindow() {
-        this.setState({showInfoWindow: true});
-    }
-
-    hideWindow() {
-        this.setState({showInfoWindow: false});
     }
 
     render() {
@@ -26,11 +15,11 @@ class Bin extends Component {
             <div
                 className="bin"
                 style={binStyles}
-                onClick={() => this.showWindow()}
+                onClick={() => this.props.setBinFocus(this.props.marker.id)}
             >
-                {this.state.showInfoWindow &&
+                {this.props.marker.focused &&
                 <Card className="info-box">
-                    <div className="info-box-cross" onClick={(e) => {this.hideWindow(); e.stopPropagation();}}>
+                    <div className="info-box-cross" onClick={(e) => {this.props.removeFocus(); e.stopPropagation();}}>
                         ×
                     </div>
                     <CardText>
@@ -45,11 +34,11 @@ class Bin extends Component {
                     <CardActions className="info-box-card-actions">
                         {this.props.marker.assigned ?
                             (<FlatButton label="Unassign" onClick={(e) => {
-                                this.props.unassign(this.props.id);
+                                this.props.unassign(this.props.marker.id);
                                 e.preventDefault()
                             }}/>) :
                             (<FlatButton label="Assign" onClick={(e) => {
-                                this.props.assign(this.props.id);
+                                this.props.assign(this.props.marker.id);
                                 e.preventDefault()
                             }}/>)
                         }
