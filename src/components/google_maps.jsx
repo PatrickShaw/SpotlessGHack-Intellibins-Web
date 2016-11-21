@@ -34,7 +34,7 @@ class GoogleMaps extends Component {
 
         if (this.heatmap === undefined) {
             this.heatmap = new this.maps.visualization.HeatmapLayer({
-                radius: 75,
+                radius: 100,
                 data: this.props.markers.map((marker) => {
                     return {
                         location: new this.maps.LatLng(marker.coord[0], marker.coord[1]),
