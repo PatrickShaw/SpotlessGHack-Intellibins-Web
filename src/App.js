@@ -18,7 +18,10 @@ class App extends Component {
         super();
         this.state = {
             bins:[],
-            sort: SORT_FULL
+            sort: SORT_FULL,
+            mapLayer: {
+                heatmap: false
+            }
         };
         getBins((err, data) => {
             const bins = JSON.parse(data).map((bin) => {
@@ -28,11 +31,15 @@ class App extends Component {
             const sortedBins = this._sortBinsByFull(bins);
             this.setState({
                 bins: sortedBins,
-                sort: SORT_FULL
+                sort: SORT_FULL,
+                mapLayer: {
+                    heatmap: false
+                }
             });
         });
         this.setBinFocus = this.setBinFocus.bind(this);
         this.removeFocus = this.removeFocus.bind(this);
+        this.toggleHeatmap = this.toggleHeatmap.bind(this);
         this.sortBy = this.sortBy.bind(this);
     }
 
@@ -46,7 +53,6 @@ class App extends Component {
         return bins.sort((bin1, bin2) => {
             return bin1.id - bin2.id;
         });
-
     }
 
     sortBy(sortId) {
@@ -63,10 +69,23 @@ class App extends Component {
                 break;
         }
 
-        this.setState({
-            bins: bins,
-            sort: sortId
-        });
+        this.setState(() => {
+            return {
+                bins: bins,
+                sort: sortId,
+                mapLayer: this.state.mapLayer
+            }});
+    }
+
+    toggleHeatmap() {
+        this.setState(() => {
+            return {
+                bins: this.state.bins,
+                sort: this.state.sort,
+                mapLayer: {
+                    heatmap: !this.state.mapLayer.heatmap
+                }
+            }});
     }
 
     setBinFocus(binId) {
@@ -74,10 +93,12 @@ class App extends Component {
             bin['focused'] = bin.id === binId;
             return bin;
         });
-        this.setState({
-            bins: bins,
-            sort: this.state.sort
-        });
+        this.setState(() => {
+            return {
+                bins: bins,
+                sort: this.state.sort,
+                mapLayer: this.state.mapLayer
+            }});
     }
 
     removeFocus() {
@@ -85,28 +106,34 @@ class App extends Component {
             bin['focused'] = false;
             return bin;
         });
-        this.setState({
-            bins: bins,
-            sort: this.state.sort
-        });
+        this.setState(() => {
+            return {
+                bins: bins,
+                sort: this.state.sort,
+                mapLayer: this.state.mapLayer
+            }});
 
     }
 
     assignBin(binId) {
         assignBin(binId, (err, data) => {
-            this.setState({
-                bins: JSON.parse(data),
-                sort: this.state.sort
-            });
+            this.setState(() => {
+                return {
+                    bins: JSON.parse(data),
+                    sort: this.state.sort,
+                    mapLayer: this.state.mapLayer
+                }});
         });
     }
 
     unassignBin(binId) {
         unassignBin(binId, (err, data) => {
-            this.setState({
-                bins: JSON.parse(data),
-                sort: this.state.sort
-            });
+            this.setState(() => {
+                return {
+                    bins: JSON.parse(data),
+                    sort: this.state.sort,
+                    mapLayer: this.state.mapLayer
+                }});
         });
     }
 
@@ -120,6 +147,7 @@ class App extends Component {
                                     <BinSort
                                         sortBy={parent.sortBy}
                                         currentSort={parent.state.sort}
+                                        toggleHeatmap={parent.toggleHeatmap}
                                     />
                                     <BinList
                                         bins={parent.state.bins}
@@ -130,6 +158,7 @@ class App extends Component {
                         </Drawer>
 
                         <GoogleMaps
+                            mapLayer={parent.state.mapLayer}
                             setBinFocus={parent.setBinFocus}
                             removeFocus={parent.removeFocus}
                             assignBin={this.assignBin.bind(this)}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Checkbox from 'material-ui/Checkbox';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import './bin_sort.css';
@@ -23,6 +24,13 @@ class BinSort extends React.Component {
                         <MenuItem value={2} primaryText="ID"/>
                     </DropDownMenu>
                 </div>
+                <div className="layer">
+                    <Checkbox
+                        label="Heat Map"
+                        onCheck={() => {this.props.toggleHeatmap()}}
+                    />
+                </div>
+                <hr/>
             </div>
         )
     }

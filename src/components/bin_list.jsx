@@ -6,8 +6,7 @@ class BinList extends React.Component {
         const parent = this;
         return (
             <List>
-                {
-                    parent.props.bins.map(function(bin, index) {
+                {parent.props.bins.map(function(bin, index) {
                         return <BinItem
                             bin={bin}
                             key={index}

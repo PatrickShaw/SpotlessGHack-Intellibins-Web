@@ -2,9 +2,13 @@ h1 {
     padding-left: 15px;
 }
 
+.layer {
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
 .sort-by-wrapper {
     padding-left: 15px;
     padding-right: 15px;
-    border-bottom: 1px solid #eee;
     padding-bottom: 15px;
 }

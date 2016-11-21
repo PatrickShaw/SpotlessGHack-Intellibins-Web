@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './bin.css'
-import {binStyles} from './bin_styles.js';
 import {Card, CardActions, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import img from "../../drawables/marker.svg";
+import getMarker from '../../util/marker';
 
 class Bin extends Component {
     constructor(props) {
@@ -14,7 +13,9 @@ class Bin extends Component {
         return (
             <div
                 className="bin"
-                style={binStyles}
+                style={{
+                    backgroundImage: 'url(' + getMarker(this.props.marker.full) + ')'
+                }}
                 onClick={() => this.props.setBinFocus(this.props.marker.id)}
             >
                 {this.props.marker.focused &&
@@ -24,7 +25,7 @@ class Bin extends Component {
                     </div>
                     <CardText>
                         <div className="info-box-image">
-                            <img src={img} />
+                            <img src={getMarker(this.props.marker.full)} />
                         </div>
                         <div className="info-box-text">
                             <strong>ID:</strong> <span>{this.props.marker.id}</span><br/>

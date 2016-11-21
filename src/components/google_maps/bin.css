@@ -4,6 +4,9 @@
     left: -15px;
     top: -15px;
     box-sizing: border-box;
+    position: absolute;
+    background: no-repeat center;
+    cursor: pointer;
 }
 
 .info-box {
