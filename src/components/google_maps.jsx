@@ -26,7 +26,7 @@ class GoogleMaps extends Component {
                 {this.props.markers.map((marker, index) => (
                     <Bin
                         id={marker.id}
-                        assigned={marker.assigned}
+                        marker={marker}
                         lat={marker.coord[0]}
                         lng={marker.coord[1]}
                         unassign={this.unassign}
