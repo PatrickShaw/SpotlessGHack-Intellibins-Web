@@ -1,22 +1,6 @@
 import React, {Component} from 'react';
-import { withGoogleMap, GoogleMap } from "react-google-maps";
+import GoogleMap from "google-map-react";
 import Bin from './google_maps/bin';
-
-const GettingStartedGoogleMap = withGoogleMap(props => (
-    <GoogleMap
-        defaultZoom={19}
-        defaultCenter={{lat: -37.813451, lng: 144.963256}}
-    >
-        {props.markers.map((marker, index) => (
-            <Bin
-                id={index}
-                marker={marker}
-                unassign={props.unassign}
-                assign={props.assign}
-             />
-        ))}
-    </GoogleMap>
-));
 
 class GoogleMaps extends Component {
     constructor(props) {
@@ -35,17 +19,21 @@ class GoogleMaps extends Component {
 
     render() {
         return (
-            <GettingStartedGoogleMap
-                markers={this.props.markers}
-                assign={this.assign}
-                unassign={this.unassign}
-                containerElement={
-                    <div style={{height: `100%`}}/>
-                }
-                mapElement={
-                    <div style={{height: `100%`}}/>
-                }
-            />
+            <GoogleMap
+                zoom={19}
+                center={{lat: -37.813451, lng: 144.963256}}
+            >
+                {this.props.markers.map((marker, index) => (
+                    <Bin
+                        id={marker.id}
+                        assigned={marker.assigned}
+                        lat={marker.coord[0]}
+                        lng={marker.coord[1]}
+                        unassign={this.unassign}
+                        assign={this.assign}
+                    />
+                ))}
+            </GoogleMap>
         );
     }
 }

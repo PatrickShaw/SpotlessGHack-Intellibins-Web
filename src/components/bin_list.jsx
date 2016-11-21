@@ -1,10 +1,7 @@
 import React from 'react';
 import BinItem from './bin_item';
-import {List} from 'material-ui/List';
+import List from 'material-ui/List';
 class BinList extends React.Component {
-    constructor() {
-        super();
-    }
     render() {
         const parent = this;
         return <List>

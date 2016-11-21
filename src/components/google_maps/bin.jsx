@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import { Marker, InfoWindow } from "react-google-maps";
+import './bin.css'
+import {binStyles} from './bin_styles.js';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 class Bin extends Component {
     constructor(props) {
@@ -14,21 +17,24 @@ class Bin extends Component {
 
     render() {
         return (
-            <Marker
-                {...this.props.marker}
+            <div
+                className="bin"
+                style={binStyles}
                 onClick={() => this.onMarkerClick()}
             >
-                {this.state.showInfoWindow === true &&
-                (this.props.marker.assigned ? (
-                        <InfoWindow>
-                            <button onClick={() => this.props.unassign(this.props.id)}>Unassign</button>
-                        </InfoWindow>) :
-                        (<InfoWindow>
-                            <button onClick={() => this.props.assign(this.props.id)}>Assign</button>
-                        </InfoWindow>)
-                )
+                {this.state.showInfoWindow === true && (this.props.assigned ? (
+                    <Card className="info-box">
+                        <CardActions>
+                            <FlatButton label="Unassign" onClick={() => this.props.unassign(this.props.id)}/>
+                        </CardActions>
+                    </Card>) :
+                    (<Card className="info-box">
+                        <CardActions>
+                            <FlatButton label="Assign" onClick={() => this.props.assign(this.props.id)}/>
+                        </CardActions>
+                    </Card>))
                 }
-            </Marker>
+            </div>
         );
     }
 }

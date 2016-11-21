@@ -1,0 +1,35 @@
+.bin {
+    width: 30px;
+    height: 30px;
+    left: -15px;
+    top: -15px;
+}
+
+.info-box {
+    position: relative;
+    width: 300px;
+    transform: translateY(-120%) translateX(calc(-50% + 15px));
+    padding: 15px;
+}
+
+.info-box:after, .arrow_box:before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.info-box:after {
+    border-top-color: white;
+    border-width: 8px;
+    margin-left: -8px;
+}
+.info-box:before {
+    border-top-color: white;
+    border-width: 14px;
+    margin-left: -14px;
+}
