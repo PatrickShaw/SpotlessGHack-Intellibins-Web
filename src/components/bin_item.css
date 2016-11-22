@@ -1,3 +1,9 @@
-.bin-item:hover {
-    background-color: #E0E0E0;
+.assigned-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    opacity: 0.5;
 }

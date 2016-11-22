@@ -5,14 +5,10 @@ import FlatButton from 'material-ui/FlatButton';
 import getMarker from '../../util/marker';
 
 class Bin extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div
-                className="bin"
+                className={"bin"}
                 style={{
                     backgroundImage: 'url(' + getMarker(this.props.marker.full) + ')'
                 }}
@@ -25,7 +21,7 @@ class Bin extends Component {
                     </div>
                     <CardText>
                         <div className="info-box-image">
-                            <img src={getMarker(this.props.marker.full)} />
+                            <img src={getMarker(this.props.marker.full)} alt={"Bin marker"}/>
                         </div>
                         <div className="info-box-text">
                             <strong>ID:</strong> <span>{this.props.marker.id}</span><br/>

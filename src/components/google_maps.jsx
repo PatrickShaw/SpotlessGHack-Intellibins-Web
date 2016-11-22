@@ -18,13 +18,13 @@ class GoogleMaps extends Component {
         this.props.unassignBin(targetIndex);
     }
 
-    setHeatMap(enable) {
+    setHeatMap(enable, lastUpdated) {
         if (this.maps === undefined) {
             console.log('Heat map is undefined');
             return;
         }
 
-        if (!enable && this.heatmap == undefined) {
+        if (!enable && this.heatmap === undefined) {
             return;
         }
 
@@ -32,7 +32,12 @@ class GoogleMaps extends Component {
             return this.heatmap.setMap(null);
         }
 
-        if (this.heatmap === undefined) {
+        let oldMap = this.heatmap;
+
+        if (this.heatmap === undefined
+            || this.lastUpdated !== lastUpdated) {
+            this.lastUpdated = lastUpdated;
+
             this.heatmap = new this.maps.visualization.HeatmapLayer({
                 radius: 100,
                 data: this.props.markers.map((marker) => {
@@ -44,14 +49,19 @@ class GoogleMaps extends Component {
             });
         }
 
-        this.heatmap.setMap(this.map);
+        if (oldMap !== this.heatmap) {
+            this.heatmap.setMap(this.map);
+            setTimeout(() => {
+                oldMap.setMap(null);
+            }, 10);
+        }
     }
 
     render() {
         return (
             <GoogleMap
                 zoom={19}
-                center={{lat: -37.813451, lng: 144.963256}}
+                center={{lat: -37.81950134905335, lng: 144.98429111204815}}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({map, maps}) => {
                     this.map = map;
@@ -61,7 +71,7 @@ class GoogleMaps extends Component {
             >
                 {this.props.markers.map((marker, index) => (
                     <Bin
-                        ref={this.setHeatMap(this.props.mapLayer.heatmap)}
+                        ref={this.setHeatMap(this.props.mapLayer.heatmap, this.props.lastUpdated)}
                         key={index}
                         setBinFocus={this.props.setBinFocus}
                         removeFocus={this.props.removeFocus}

@@ -2,6 +2,7 @@ import React from 'react';
 import {ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar'; // TODO: Fix this
 import getMarker from '../util/marker';
+import './bin_item.css';
 
 class BinItem extends React.Component {
     render() {
@@ -12,6 +13,7 @@ class BinItem extends React.Component {
                 backgroundColor={'transparent'}
                 src={getMarker(this.props.bin.full)}
             />}
+            className={this.props.bin.assigned === true ? "assigned-item" : ""}
             onClick={() => {this.props.setBinFocus(this.props.bin.id)}}
         />
     }

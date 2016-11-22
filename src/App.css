@@ -1,0 +1,21 @@
+.toggle-updates {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25px;
+    height: 25Spx;
+    background: white;
+    z-index: 100;
+}
+
+.toggle-network {
+    position: absolute;
+    top: 25px;
+    right: 0;
+    width: 25px;
+    height: 25Spx;
+    background: white;
+    z-index: 100;
+
+
+}

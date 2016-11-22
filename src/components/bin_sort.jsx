@@ -5,10 +5,6 @@ import MenuItem from 'material-ui/MenuItem';
 import './bin_sort.css';
 
 class BinSort extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleChange(event, index, value) {
         this.props.sortBy(value);
     }

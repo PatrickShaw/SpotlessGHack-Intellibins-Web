@@ -34,8 +34,61 @@ class App extends Component {
                 sort: SORT_FULL,
                 mapLayer: {
                     heatmap: false
-                }
+                },
+                lastUpdated: -1,
+                enableUpdates: 1
             });
+
+            this.interval = setInterval(() => {
+                if (!this.state.enableUpdates) {
+                    return;
+                }
+
+                if (this.state.enableNetwork) {
+                    getBins((err, data) => {
+                        const bins = JSON.parse(data).map((bin) => {
+                            bin['focused'] = false;
+                            return bin;
+                        });
+                        let newBins = this._sortBinsByFull(bins);
+                        if (this.state.sort === SORT_ID) {
+                            newBins = this._sortBinsById(bins);
+                        }
+                        this.setState({
+                            bins: newBins,
+                            sort: this.state.sort,
+                            focused: this.state.focused,
+                            mapLayer: {
+                                heatmap: this.state.mapLayer.heatmap
+                            },
+                            lastUpdated: Date.now()
+                        })
+                    });
+                } else {
+                    let newBins = bins.map((bin) => {
+                        bin.full += 3;
+                        bin.full = bin.full % 95;
+                        return bin;
+                    });
+
+                    if (this.state.sort === SORT_ID) {
+                        newBins = this._sortBinsById(newBins);
+                    } else {
+                        newBins = this._sortBinsByFull(newBins);
+                    }
+
+                    this.setState({
+                        bins: newBins,
+                        sort: this.state.sort,
+                        focused: this.state.focused,
+                        mapLayer: {
+                            heatmap: this.state.mapLayer.heatmap
+                        },
+                        lastUpdated: Date.now()
+                    });
+                }
+            }, 1000);
+
         });
         this.setBinFocus = this.setBinFocus.bind(this);
         this.removeFocus = this.removeFocus.bind(this);
@@ -73,7 +126,35 @@ class App extends Component {
             return {
                 bins: bins,
                 sort: sortId,
-                mapLayer: this.state.mapLayer
+                mapLayer: this.state.mapLayer,
+                enableUpdates: this.state.enableUpdates,
+                enableNetwork: this.state.enableNetwork
+            }});
+    }
+
+    toggleNetwork() {
+        this.setState(() => {
+            return {
+                bins: this.state.bins,
+                sort: this.state.sort,
+                mapLayer: {
+                    heatmap: this.state.mapLayer.heatmap
+                },
+                enableUpdates: this.state.enableUpdates,
+                enableNetwork: !this.state.enableNetwork
+            }});
+    }
+
+    toggleEnableUpdates() {
+        this.setState(() => {
+            return {
+                bins: this.state.bins,
+                sort: this.state.sort,
+                mapLayer: {
+                    heatmap: this.state.mapLayer.heatmap
+                },
+                enableUpdates: !this.state.enableUpdates,
+                enableNetwork: this.state.enableNetwork
             }});
     }
 
@@ -84,7 +165,9 @@ class App extends Component {
                 sort: this.state.sort,
                 mapLayer: {
                     heatmap: !this.state.mapLayer.heatmap
-                }
+                },
+                enableUpdates: this.state.enableUpdates,
+                enableNetwork: this.state.enableNetwork
             }});
     }
 
@@ -97,7 +180,9 @@ class App extends Component {
             return {
                 bins: bins,
                 sort: this.state.sort,
-                mapLayer: this.state.mapLayer
+                mapLayer: this.state.mapLayer,
+                enableUpdates: this.state.enableUpdates,
+                enableNetwork: this.state.enableNetwork
             }});
     }
 
@@ -110,30 +195,28 @@ class App extends Component {
             return {
                 bins: bins,
                 sort: this.state.sort,
-                mapLayer: this.state.mapLayer
+                mapLayer: this.state.mapLayer,
+                enableUpdates: this.state.enableUpdates,
+                enableNetwork: this.state.enableNetwork
             }});
 
     }
 
     assignBin(binId) {
-        assignBin(binId, (err, data) => {
-            this.setState(() => {
-                return {
-                    bins: JSON.parse(data),
-                    sort: this.state.sort,
-                    mapLayer: this.state.mapLayer
-                }});
+        this.state.bins.map((bin) => {
+            if (bin.id === binId) {
+                bin.assigned = true;
+            }
+            return bin;
         });
     }
 
     unassignBin(binId) {
-        unassignBin(binId, (err, data) => {
-            this.setState(() => {
-                return {
-                    bins: JSON.parse(data),
-                    sort: this.state.sort,
-                    mapLayer: this.state.mapLayer
-                }});
+        this.state.bins.map((bin) => {
+            if (bin.id === binId) {
+                bin.assigned = false;
+            }
+            return bin;
         });
     }
 
@@ -157,7 +240,24 @@ class App extends Component {
                             : false}
                         </Drawer>
 
+                        <div
+                            className="toggle-updates"
+                            onClick={() => {
+                            this.toggleEnableUpdates()
+                        }}>
+                            {this.state.enableUpdates ? "E" : "D"}
+                        </div>
+
+                        <div
+                            className="toggle-network"
+                            onClick={() => {
+                                this.toggleNetwork()
+                            }}>
+                            {this.state.enableNetwork ? "N" : "L"}
+                        </div>
+
                         <GoogleMaps
+                            lastUpdated={parent.state.lastUpdated}
                             mapLayer={parent.state.mapLayer}
                             setBinFocus={parent.setBinFocus}
                             removeFocus={parent.removeFocus}
